@@ -1,0 +1,95 @@
+<div class="ds-card grid" #container id="load">
+    <dx-data-grid class="p-8 flow" id="gridContainer" [wordWrapEnabled]="true" [dataSource]="zones"
+        [remoteOperations]="false" [allowColumnReordering]="true" [rowAlternationEnabled]="true"
+        [allowColumnResizing]="true" [showColumnLines]="true" [showRowLines]="true" [showBorders]="true"
+        style="width:100%" (onToolbarPreparing)="(permissions.insrt_in==1)?onToolbarPreparing($event):false">
+        <dxo-paging [pageSize]="10"></dxo-paging>
+        <dxo-scrolling [scrollByContent]="true"
+    [scrollByThumb]="true"
+    mode="standard"
+    [useNative]="true"
+    showScrollbar="onScroll"></dxo-scrolling>
+        <dxo-pager [visible]="true" [showPageSizeSelector]="true" [allowedPageSizes]="[10, 25, 50, 100]"
+            [showInfo]="true"></dxo-pager>
+        <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true"></dxo-search-panel>
+        <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+        <dxo-header-filter [visible]="true"></dxo-header-filter>
+        <dxo-group-panel [visible]="true"></dxo-group-panel>
+        <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
+        <dxo-column-chooser [enabled]="true" mode="select">
+        </dxo-column-chooser>
+        <dxo-export [enabled]="(permissions.exprt_in==1)?true:false" [allowExportSelectedData]="true"
+            fileName="Department"></dxo-export>
+        <dxo-filter-row [visible]="true"></dxo-filter-row>
+        <dxi-column *ngFor="let f of columnDefs" [visible]="true" [dataField]="f.field"
+            [caption]="f.headerName" [alignment]="f.alignment" [width]="f.width" [allowResizing]="false" [nzLoading]="isLoading">
+        </dxi-column>
+        <dxi-column [showInColumnChooser]="false" [allowExporting]="false" [visible]="(permissions.updt_in==1)?true:false" type="buttons"
+            [width]="100" cellTemplate="viewTemplate" [allowResizing]="false" caption="Actions" >
+            <div *dxTemplate="let data of 'viewTemplate'">
+                <div class="tblEdtBtn" (click)="edit('edit',data.data)">
+                    Edit
+                </div>
+            </div>
+        </dxi-column>
+        <dxi-column [showInColumnChooser]="false" type="button1" [allowExporting]="false" [width]="100" cellTemplate="EditTemplate" [allowResizing]="false" caption="Actions">
+            <div *dxTemplate="let data of 'EditTemplate'">
+                <div class="cursor-pointer tblEdtBtn" (click)="delete(data.data)">
+                    Delete
+                </div>
+            </div>
+        </dxi-column>
+    </dx-data-grid>
+</div>
+<dx-load-panel [container]="container" [visible]="isLoading" [showIndicator]="true" [position]="{ of: '#load' }"
+[showPane]="true" [shading]="true" [hideOnOutsideClick]="false" ></dx-load-panel>
+<nz-drawer [nzBodyStyle]="{ overflow: 'auto' }" [nzMaskClosable]="true" [nzWidth]="600" [nzVisible]="visible"
+  [nzTitle]="drawerTitle" [nzFooter]="footerTpl" (nzOnClose)="close()" [nzClosable]="false" [nzCloseIcon]="icon"
+  [nzExtra]="icon">
+  <ng-template #icon>
+    <i (click)="close()" class="fa-solid fa-circle-xmark"></i>
+  </ng-template>
+  <form nz-form *nzDrawerContent [formGroup]="shopForm" class="drawer-form">
+    <div>
+      <nz-form-item>
+        <nz-form-label nz-col nzSpan="10" class="required">Shop Name</nz-form-label>
+        <nz-form-control nz-col nzSpan="12" nzHasFeedback [nzErrorTip]="deptErrorTp">
+          <input nz-input formControlName="shop_name" type="text" nz-input
+            placeholder="Please Enter Shop Name" />
+          <ng-template #deptErrorTp let-control>
+            <ng-container *ngIf="control.hasError('required')">Please Enter Zone Name</ng-container>
+            <ng-container *ngIf="control.hasError('maxlength')">Maxlength is 50 <br /></ng-container>
+            <ng-container *ngIf="control.hasError('minlength')">Minlength is 2 <br /></ng-container>
+            <ng-container *ngIf="control.hasError('pattern')">Please Enter Valid Zone Name</ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+
+    <div *ngIf="showStatus">
+      <nz-form-item>
+        <nz-form-label nz-col nzSpan="10" class="required">Status</nz-form-label>
+        <nz-select formControlName="status" nz-col nzSpan="12" nzPlaceHolder="Status" nzShowSearch>
+          <nz-option nzValue="active" nzLabel="active"></nz-option>
+          <nz-option nzValue="inactive" nzLabel="inactive"></nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
+  </form>
+
+  <ng-template #footerTpl>
+    <div style="float: right">
+      <button nz-button style="margin-right: 8px" (click)="close()">
+        Cancel
+      </button>
+      <button nz-button *ngIf="submit" nzType="primary" (click)="onCreateSubmit()">
+        Submit
+      </button>
+      <button nz-button *ngIf="!submit && updateBtnDisable" nzType="primary" (click)="onUpdateSubmit()">
+        Update
+      </button>
+    </div>
+  </ng-template>
+</nz-drawer>
+

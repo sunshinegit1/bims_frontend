@@ -1,0 +1,21 @@
+<div class="side-nav" sideNav>
+  <ul nz-menu nzMode="inline" [nzInlineCollapsed]="isFolded" [nzTheme]="isSideNavDark ? 'dark' : 'light'">
+    <ng-container *ngFor="let item of mainMenuItems">
+      <li *ngIf="(!item.children && item.status)" nz-menu-item nz-tooltip nzTooltipPlacement="right"
+        [nzMatchRouter]="true" [nzTooltipTitle]="isFolded ? item.title : ''"
+        routerLink="/internal/bims/{{ item.path }}">
+        <span nz-icon nzType="{{item.icon}}" nzTheme="outline"></span>
+        <span>{{ item.title }}</span>
+      </li>
+      <li *ngIf="item.children" nz-submenu [nzTitle]="item.title" [nzIcon]="item.icon">
+        <ul>
+          <li nz-menu-item routerLink="/internal/bims/{{ child.path }}" *ngFor="let child of item.children"
+            [nzMatchRouter]="true">
+            <span nz-icon nzType="{{child.icon}}" nzTheme="outline"></span>
+            <span>{{ child.title }}</span>
+          </li>
+        </ul>
+      </li>
+    </ng-container>
+  </ul>
+</div>
