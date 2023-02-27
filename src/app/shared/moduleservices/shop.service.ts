@@ -14,15 +14,22 @@ export class ShopService {
 
   constructor(private apiService: ApiService) { }
 
-  getZone(): Observable<any> {
-    return this.apiService.getCall('/zone/getZones').pipe(
+  getShops(): Observable<any> {
+    return this.apiService.getCall('/shop/getShops').pipe(
       map((response: any) => {
         return response;
       })
     );
   }
-  createZone(data: any): Observable<any> {
-    return this.apiService.postCall('/zone/createZones/', data).pipe(
+  createShop(data: any): Observable<any> {
+    return this.apiService.postCall('/shop/createShop/', data).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
+  }
+  updateShop(id: any, postDataObj: any): Observable<any> {
+    return this.apiService.patchCall('/shop/updateShop/' + id, postDataObj).pipe(
       map((response: any) => {
         return response;
       })

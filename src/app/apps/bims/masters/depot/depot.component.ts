@@ -96,7 +96,6 @@ export class DepotComponent implements OnInit {
       contact_person_name: data.contact_person_name,
       email: data.email,
       phone_number: data.phone_number,
-      vendor_name: data.vendor_name,
       address: data.address,
       district: data.district,
       state: data.state,
@@ -130,11 +129,11 @@ export class DepotComponent implements OnInit {
     }
   }
 
-    //edit zone functions
+    //edit depot
     edit(data: any) {
       this.submit = false;
       this.visible = true;
-      this.drawerTitle = 'Edit Zone Details';
+      this.drawerTitle = 'Edit Depot Details';
       this.updateBtnDisable = true;
       this.depot_id = data.depot_id;
       this.depotFormValidators();
